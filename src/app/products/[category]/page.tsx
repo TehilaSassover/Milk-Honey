@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { fetchByCategory } from "@/lib/api";
 import ProductGrid from "@/components/ProductGrid";
 import { parseCategoryFromUrl } from "@/lib/utils";

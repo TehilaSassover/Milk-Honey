@@ -1,4 +1,5 @@
 // app/products/page.tsx
+export const dynamic = "force-dynamic";
 import Link from "next/link";
 import { fetchAllProducts, fetchCategories } from "@/lib/api";
 import ProductGrid from "../../components/ProductGrid";
