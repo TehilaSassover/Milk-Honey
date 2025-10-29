@@ -1,4 +1,5 @@
 // app/product/[id]/page.tsx
+export const dynamic = "force-dynamic";
 import { fetchProductById } from "@/lib/api";
 import ProductDetails from "@/components/ProductDetails";
 

@@ -2,6 +2,7 @@
 import { fetchAllProducts } from "@/lib/api";
 import ProductGrid from "../components/ProductGrid";
 import styles from "@/styles/Home.module.css";
+export const dynamic = "force-dynamic";
 
 export default async function Home() {
   const products = await fetchAllProducts();
