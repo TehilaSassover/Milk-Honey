@@ -24,13 +24,6 @@ export const dynamic = "force-dynamic";
 
 type Props = { params: Promise<{ category: string }> }; // Params are a promise
 
-// מאפשר Next.js ליצור דפי קטגוריה סטטיים מראש
-export async function generateStaticParams() {
-  const categories = await fetchCategories();
-  return categories.map(cat => ({
-    category: formatCategoryForUrl(cat) // slugify לכל URL
-  }));
-}
 
 export default async function CategoryPage({ params }: Props) {
   const { category } = await params; // unwrap the Promise
