@@ -1,24 +1,44 @@
-export const dynamic = "force-dynamic";
-import { fetchProductById } from "@/lib/api";
+"use client";
+
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+import { fetchProductById, Product } from "@/lib/api";
 import ProductDetails from "@/components/ProductDetails";
 
+export default function ProductPage() {
+  const params = useParams();
+  const id = params?.id;
+  const [product, setProduct] = useState<Product | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-type Props = { params: Promise<{ id: string }> };
+  useEffect(() => {
+    if (!id) return;
 
-export default async function ProductPage({ params }: Props) {
-  const { id } = await params; // unwrap the Promise
+    const productId = Array.isArray(id) ? id[0] ?? "" : id;
+    if (!productId) return;
 
-  if (!id) return <p>Product not found.</p>;
+    const loadProduct = async () => {
+      try {
+        const prod = await fetchProductById(productId);
+        setProduct(prod);
+      } catch (err) {
+        console.error("Failed to fetch product:", err);
+        setError("Product not found or failed to load.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadProduct();
+  }, [id]);
 
-  try {
-    const product = await fetchProductById(id);
-    return (
-      <section style={{ paddingTop: 12 }}>
-        <ProductDetails product={product} />
-      </section>
-    );
-  } catch (error) {
-    console.error("Error fetching product:", error);
-    return <p>Product not found or failed to load.</p>;
-  }
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>{error}</p>;
+  if (!product) return <p>Product not found.</p>;
+
+  return (
+    <section style={{ paddingTop: 12 }}>
+      <ProductDetails product={product} />
+    </section>
+  );
 }

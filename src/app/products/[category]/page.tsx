@@ -17,31 +17,58 @@
 //     </section>
 //   );
 // }
-import { fetchByCategory, Product, fetchCategories } from "@/lib/api";
+"use client";
+
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+import { fetchByCategory, fetchCategories, Product } from "@/lib/api";
 import ProductGrid from "@/components/ProductGrid";
 import { formatCategoryForUrl } from "@/lib/utils";
-export const dynamic = "force-dynamic";
 
-type Props = { params: Promise<{ category: string }> }; // Params are a promise
+export default function CategoryPage() {
+  const params = useParams(); // Next.js hook to get the [category] param
+  const slug = params?.category;
+  const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
+  useEffect(() => {
+    if (!slug) return;
 
-export default async function CategoryPage({ params }: Props) {
-  const { category } = await params; // unwrap the Promise
-  console.log("Category param:", category);
-  if (!category) {
-    return <p>Category not found.</p>;
-  }
+    const loadData = async () => {
+      try {
+        const cats = await fetchCategories();
+        setCategories(cats);
 
-  try {
-    const products: Product[] = await fetchByCategory(category);
-    return (
-      <section>
-        <h1>Category: {category.replace(/-/g, " ")}</h1>
-        <ProductGrid products={products} />
-      </section>
-    );
-  } catch (error) {
-    console.error("Error fetching products by category:", error);
-    return <p>Failed to load products for this category.</p>;
-  }
+        const realCategory =
+          cats.find(cat => formatCategoryForUrl(cat) === slug) || null;
+
+        if (!realCategory) {
+          setError("Category not found.");
+          setProducts([]);
+          return;
+        }
+
+        const prods = await fetchByCategory(realCategory);
+        setProducts(prods);
+      } catch (err) {
+        console.error("Failed to fetch category products:", err);
+        setError("Failed to load data.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadData();
+  }, [slug]);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>{error}</p>;
+
+  return (
+    <section>
+      <h1>Category: {typeof slug === 'string' ? slug.replace(/-/g, " ") : ''}</h1>
+      <ProductGrid products={products} />
+    </section>
+  );
 }
