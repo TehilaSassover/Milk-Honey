@@ -4,6 +4,8 @@ import { useCart } from "@/stores/useCart";
 import { useWishlist } from "@/stores/useWishlist";
 import styles from "@/styles/Product.module.css";
 import { useState } from "react";
+export const dynamic = "force-dynamic";
+
 
 export default function ProductDetails({ product }: { product?: Product }) {
   const addItem = useCart(s => s.addItem);

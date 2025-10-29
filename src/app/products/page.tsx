@@ -85,6 +85,8 @@ import { useEffect, useState } from "react";
 import { fetchAllProducts, fetchCategories, Product } from "@/lib/api";
 import ProductGrid from "@/components/ProductGrid";
 import { formatCategoryForUrl } from "@/lib/utils";
+export const dynamic = "force-dynamic";
+
 
 export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);

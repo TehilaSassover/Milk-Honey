@@ -20,6 +20,7 @@
 import { fetchByCategory, Product, fetchCategories } from "@/lib/api";
 import ProductGrid from "@/components/ProductGrid";
 import { formatCategoryForUrl } from "@/lib/utils";
+export const dynamic = "force-dynamic";
 
 type Props = { params: Promise<{ category: string }> }; // Params are a promise
 

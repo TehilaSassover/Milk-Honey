@@ -2,6 +2,7 @@ export const dynamic = "force-dynamic";
 import { fetchProductById } from "@/lib/api";
 import ProductDetails from "@/components/ProductDetails";
 
+
 type Props = { params: Promise<{ id: string }> };
 
 export default async function ProductPage({ params }: Props) {
