@@ -1,18 +1,16 @@
-// app/product/[id]/page.tsx
-
+export const dynamic = "force-dynamic";
 import { fetchProductById } from "@/lib/api";
 import ProductDetails from "@/components/ProductDetails";
 
 type Props = { params: Promise<{ id: string }> };
 
 export default async function ProductPage({ params }: Props) {
-  const { id } = await params;
-  console.log("Product ID:", id);
+  const { id } = await params; // unwrap the Promise
+
+  if (!id) return <p>Product not found.</p>;
 
   try {
     const product = await fetchProductById(id);
-    console.log("Fetched product:", product);
-
     return (
       <section style={{ paddingTop: 12 }}>
         <ProductDetails product={product} />
