@@ -1,0 +1,5 @@
+.wrap{ display:flex; gap:24px; align-items:flex-start; }
+.image{ width:320px; height:320px; object-fit:contain; background:#fff; border:1px solid #eee; padding:12px; }
+.info{ flex:1; }
+.desc{ color:#333; margin-top:8px; }
+.price{ font-size:20px; font-weight:700; margin-top:12px; }
